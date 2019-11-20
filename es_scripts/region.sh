@@ -1,4 +1,6 @@
-curl -XPOST 'localhost:9200/vs-index/_search?pretty' \
+. host.sh
+
+curl -XPOST "$host/vs-index/_search?pretty" \
 -H 'Content-Type: application/json' \
 -d '{
 "query": { 

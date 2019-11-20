@@ -40,7 +40,6 @@ for i in fileinput.input():
     try:
         data = {
         "_index": "vs-index",
-        "_type": "variant",
         "_id": id_gen(i),
         "_source": parse_line(i, data_parser, header)
     }

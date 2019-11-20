@@ -6,9 +6,9 @@ es = Elasticsearch(hosts=["127.0.0.1:9200"], timeout=5000)
 app = Flask(__name__)
 SITE_NAME = 'http://localhost:9200/'
 
-def get_mapping(idx='vs-index', tp='variant'):
+def get_mapping(idx='vs-index'):
     all_mapping = es.indices.get_mapping()
-    mapping = all_mapping[idx]['mappings'][tp]['properties']
+    mapping = all_mapping[idx]['mappings']['properties']
     fields = [i for i in mapping]
     return fields
 

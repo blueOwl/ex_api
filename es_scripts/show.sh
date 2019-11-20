@@ -1,1 +1,3 @@
-curl http://localhost:9200/vs-index/_search?pretty=true&q=*:*
+. host.sh
+
+curl $host/vs-index/_search?pretty=true&q=*:*
