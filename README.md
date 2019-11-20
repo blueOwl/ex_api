@@ -2,6 +2,12 @@
 
 ## bash scripts demo:
 
+in es_scripts
+
+e.g.
+`cd es_scripts`
+`sh show.sh`
+
 * show.sh : show first 10 docs
 * region.sh : region query
 * region_fields.sh : region query with specific fields
