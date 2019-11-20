@@ -10,7 +10,7 @@
 
 ## response 
 
-'''
+```
 {
   "took": 6,
   "timed_out": false,
@@ -27,12 +27,12 @@
     },
     "max_score": 0,
     "hits": [
-      {},
-      {}
+      {...},
+      {...}
     ]
   }
 }
-'''
+```
 
 * response.hits.total.value is total result number
 * response.hits.hits is data
