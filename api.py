@@ -16,10 +16,13 @@ def get_mapping(idx='vs-index'):
 def structure_mapping(field_list):
     res = {"ANNOVAR":[], 'VEP':[], 'SnpEff':[], 'others':[]}
     for i in field_list:
+        check = False
         for k in res:
             if k in i: 
                 res[k].append(i)
+                check = True
                 continue
+        if not check:
             res['others'].append(i)
     return res
 

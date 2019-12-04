@@ -22,6 +22,7 @@ def dict_to_tree(dic):
             node = Annotation_tree_node(nid=uid, name=anno_name, info=anno_name, parent_id=tree_dic[k].id)
             tree_dic[anno_name] = node
             uid += 1
+    print(set([tree_dic[k].parent_id for k in tree_dic]))
     return tree_dic
 
 
