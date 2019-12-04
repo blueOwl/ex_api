@@ -11,14 +11,17 @@ class Annotation_tree_node:
 			'parent_id' : self.parent_id} 
 
 def dict_to_tree(dic):
+    uid = 1
     root = Annotation_tree_node(parent_id=None)
     tree_dic = {'root':root}
     for k in dic:
-        node = Annotation_tree_node(nid=k, name=k, info='', parent_id=root.id)
+        node = Annotation_tree_node(nid=uid, name=k, info='', parent_id=root.id)
         tree_dic[k] = node
+        uid += 1
         for anno_name in dic[k]:
-            node = Annotation_tree_node(nid=anno_name, name=anno_name, info=anno_name, parent_id=k)
+            node = Annotation_tree_node(nid=uid, name=anno_name, info=anno_name, parent_id=tree_dic[k].id)
             tree_dic[anno_name] = node
+            uid += 1
     return tree_dic
 
 
