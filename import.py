@@ -12,7 +12,7 @@ def parse_line(l, data_parser, header):
         if line[idx] == ".":
             continue
         k = header[idx]
-        d[k] = data_parser[k](line[idx])
+        d[k] = data_parser.get(k, str)(line[idx])
     return d
 
 
@@ -34,9 +34,11 @@ for i in fileinput.input():
     count += 1
     if not header:
         header = i.rstrip().split("\t")
-        for k in header: 
-            if not k in data_parser:data_parser[k] = str
         continue
+    data = {
+        "_index": "vs-index",
+        "_id": id_gen(i),
+        "_source": parse_line(i, data_parser, header) }
     try:
         data = {
         "_index": "vs-index",

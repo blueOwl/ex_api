@@ -1,6 +1,7 @@
 from elasticsearch import Elasticsearch
 from flask import Flask,request,redirect,Response,jsonify
 import requests
+from tree import *
 
 es = Elasticsearch(hosts=["127.0.0.1:9200"], timeout=5000)
 app = Flask(__name__)
@@ -21,6 +22,13 @@ def structure_mapping(field_list):
                 continue
             res['others'].append(i)
     return res
+
+@app.route('/anno_tree/<idx>')
+def get_anno_tree(idx):
+    stct = structure_mapping(get_mapping(idx=idx))
+    tree_dic = dict_to_tree(stct)
+    return jsonify({"header_tree_array":[tree_dic[i].get_dic() for i in sorted(tree_dic.keys())]})
+
 
 @app.route('/<idx>/structure')
 def show_idx_str(idx):
