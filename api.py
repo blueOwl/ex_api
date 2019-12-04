@@ -55,5 +55,5 @@ def proxy(path):
         response = Response(resp.content, resp.status_code, headers)
         return response
 if __name__ == '__main__':
-    app.run(debug = False,port=9888)
+    app.run(host = '0.0.0.0',debug = False,port=3404)
 
