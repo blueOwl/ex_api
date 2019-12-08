@@ -1,10 +1,13 @@
 from elasticsearch import Elasticsearch
 from flask import Flask,request,redirect,Response,jsonify
+from flask_cors import CORS
 import requests
 from tree import *
 
 es = Elasticsearch(hosts=["127.0.0.1:9200"], timeout=5000)
 app = Flask(__name__)
+CORS(app)
+
 SITE_NAME = 'http://localhost:9200/'
 
 def get_mapping(idx='vs-index'):
@@ -26,7 +29,7 @@ def structure_mapping(field_list):
             res['others'].append(i)
     return res
 
-@app.route('/anno_tree/<idx>')
+@app.route('/<idx>/anno_tree')
 def get_anno_tree(idx):
     stct = structure_mapping(get_mapping(idx=idx))
     tree_dic = dict_to_tree(stct)
