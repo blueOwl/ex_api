@@ -23,6 +23,8 @@ data_parser = {}
 for k in dtype:
     data_parser[k] = eval(dtype[k])
 data_parser['chr'] = str
+data_parser['GWAS_catalog_pubmedid'] = str
+data_parser['GRASP_PMID'] = str
 
 es = Elasticsearch(hosts=["127.0.0.1:9200"], timeout=5000)
 
@@ -47,9 +49,9 @@ for i in fileinput.input():
     }
         da_list.append(data)
     except:
-        error.write(i)
+        print("error on:",data)
     if count % 10000 == 0:
-        helpers.bulk(es, da_list, chunk_size=5000, raise_on_error=False)
+        helpers.bulk(es, da_list, chunk_size=5000, raise_on_error=True)
         da_list = []
         print("import {}".format(count))
-helpers.bulk(es, da_list, chunk_size=5000, raise_on_error=False)
+helpers.bulk(es, da_list, chunk_size=5000, raise_on_error=True)
