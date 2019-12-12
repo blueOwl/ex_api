@@ -18,6 +18,7 @@ def map_gene(k):
         data = r.json()
         return data['search']['mapped_genes']['gene']["accession"]
     except:
+        print('gene mapping error:', k)
         return ''
 
 def get_pos_from_gene_id(gid, chromosomal_location_dic):

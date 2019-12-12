@@ -7,9 +7,10 @@ from download import *
 import uuid
 import requests
 import config
+from setup_es import *
 
-SITE_NAME = 'http://localhost:9200/'
-es = Elasticsearch(hosts=["127.0.0.1:9200"], timeout=5000)
+#SITE_NAME = 'http://localhost:9200/'
+#es = Elasticsearch(hosts=["127.0.0.1:9200"], timeout=5000)
 app = Flask(__name__)
 CORS(app)
 
@@ -78,13 +79,13 @@ def proxy(path):
     global SITE_NAME
     #print(request.get_json())
     if request.method=='GET':
-        resp = requests.get(f'{SITE_NAME}{path}')
+        resp = requests.get(f'{SITE_NAME}{path}', auth=es_auth)
         excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
         headers = [(name, value) for (name, value) in  resp.raw.headers.items() if name.lower() not in excluded_headers]
         response = Response(resp.content, resp.status_code, headers)
         return response
     elif request.method=='POST':
-        resp = requests.post(f'{SITE_NAME}{path}',json=request.get_json())
+        resp = requests.post(f'{SITE_NAME}{path}',json=request.get_json(), auth=es_auth)
         excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
         headers = [(name, value) for (name, value) in resp.raw.headers.items() if name.lower() not in excluded_headers]
         response = Response(resp.content, resp.status_code, headers)
