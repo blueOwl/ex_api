@@ -68,7 +68,7 @@ def download_file(folder, name):
 @app.route('/total_res', methods=['GET','POST'])
 def get_download_url():
     body = request.json
-    filename = str(uuid.uuid4())
+    filename = str(uuid.uuid4()) + '.txt'
     f = open(config.DOWNLOAD_DIR + '/' + filename, 'w')
     query_to_file(es, body, f.write, f.write)
     return {"url": "/download/" + 'tmp/' + filename}
