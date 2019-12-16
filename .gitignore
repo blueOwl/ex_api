@@ -131,3 +131,4 @@ dmypy.json
 data/*
 es/
 tmp/
+setup_es.py
