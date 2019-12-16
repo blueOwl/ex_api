@@ -1,5 +1,5 @@
 from elasticsearch import Elasticsearch
-from flask import Flask,request,redirect,Response,jsonify, send_from_directory
+from flask import Flask,request,redirect,Response,jsonify, send_from_directory, abort
 from flask_cors import CORS
 from tree import *
 from gene_pos import *
@@ -8,6 +8,7 @@ import uuid
 import requests
 import config
 from setup_es import *
+from utils import *
 
 #SITE_NAME = 'http://localhost:9200/'
 #es = Elasticsearch(hosts=["127.0.0.1:9200"], timeout=5000)
@@ -21,19 +22,6 @@ def get_mapping(idx='vs-index'):
     fields = [i for i in mapping]
     return fields
 
-def structure_mapping(field_list):
-    res = {"ANNOVAR":[], 'VEP':[], 'SnpEff':[], 'others':[]}
-    for i in field_list:
-        check = False
-        for k in res:
-            if k in i: 
-                res[k].append(i)
-                check = True
-                continue
-        if not check:
-            res['others'].append(i)
-    return res
-
 @app.route('/<idx>/anno_tree')
 def get_anno_tree(idx):
     stct = structure_mapping(get_mapping(idx=idx))
@@ -46,6 +34,12 @@ def show_idx_str(idx):
     stct = structure_mapping(get_mapping(idx=idx))
     return jsonify(stct)
 
+'''
+@app.route('/<idx>/vcf', methods=['POST'])
+def vcf_intersect(idx):
+    req_json = request.get_json()
+    ids = [vcf_to_id(i.encode('utf8')) for i in req_json['params']['uploadList']['ids'].split('\n') if i.encode("utf-8")[:1] != '#']
+'''
 
 @app.route('/gene')
 def search_gene_pos():
@@ -71,8 +65,20 @@ def get_download_url():
     filename = str(uuid.uuid4()) + '.txt'
     f = open(config.DOWNLOAD_DIR + '/' + filename, 'w')
     query_to_file(es, body, f.write, f.write)
-    return {"url": "/download/" + 'tmp/' + filename}
-    
+    return jsonify({"url": "/download/" + 'tmp/' + filename})
+
+@app.route('/<idx>/ids', methods=['POST'])
+def mget(idx):
+    body = request.json
+    ids = body.get('ids')
+    source = body.get('_source')
+    filename = str(uuid.uuid4()) + '.txt'
+    f = open(config.DOWNLOAD_DIR + '/' + filename, 'w')
+    if (not ids) or (not source):
+        abort(404)
+    hits = {"hits":query_vcf(es, {"ids":ids, "_source":source}, f.write)}
+    #query to file and return first page
+    return jsonify({"hits":hits, "url": "/download/" + 'tmp/' + filename})
 
 @app.route('/<path:path>',methods=['GET','POST'])
 def proxy(path):
