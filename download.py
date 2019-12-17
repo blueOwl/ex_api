@@ -1,4 +1,7 @@
+import config
+
 def query_vcf(es, body, output, index='vs-index'):
+    count = 0
     ids = body.get('ids',[])
     source = body.get('_source',[])
     col_names = source
@@ -8,6 +11,8 @@ def query_vcf(es, body, output, index='vs-index'):
         resp = es.get(index = index,
                 id = i, ignore=404)
         if resp['found']:
+            count += 1
+            if count > config.maxRes:break
             li = [str(resp['_source'][k]) for k in source if k in resp['_source']]
             output('\t'.join(li) + "\n")
             if len(page) < 50:
@@ -16,7 +21,7 @@ def query_vcf(es, body, output, index='vs-index'):
 
 
 def query_to_file(es, body, output, error_output, index='vs-index'):
-
+    count = 0
     col_names = body.get('_source',None)
     if not col_names:
         col_names = es.indices.get_mapping()[index]['mappings']['properties'].keys()
@@ -31,6 +36,8 @@ def query_to_file(es, body, output, error_output, index='vs-index'):
 
     while len(resp['hits']['hits']):
                 for doc in resp['hits']['hits']:
+                    count += 1
+                    if count > config.maxRes: break
                     li = [str(doc['_source'].get(k, '.')) for k in col_names]
                     output('\t'.join(li) + "\n")
                 resp = es.scroll(
