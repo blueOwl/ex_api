@@ -1,2 +1,2 @@
 DOWNLOAD_DIR = 'tmp'
-maxRes = 50000
+maxRes = 10000
