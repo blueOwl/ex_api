@@ -37,7 +37,8 @@ def query_to_file(es, body, output, error_output, index='vs-index'):
     while len(resp['hits']['hits']):
                 for doc in resp['hits']['hits']:
                     count += 1
-                    if count > config.maxRes: break
+                    if count > config.maxRes: 
+                        return
                     li = [str(doc['_source'].get(k, '.')) for k in col_names]
                     output('\t'.join(li) + "\n")
                 resp = es.scroll(
