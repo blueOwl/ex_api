@@ -1,4 +1,6 @@
-# Elasticsearch based API
+# AnnoQ API based on Elasticsearch
+
+Currently this API is under domain `http://annoq.org:3404/` and index name (\<idx\>) is `vs-index`.
 
 ## Annotation tree structure
 
@@ -24,21 +26,34 @@
 
 ## Download request
 
-Send with query body.
+Send json request with query body. See documents for elasticsearch.
 
 endpoint `/total_res`
 
-###response
+### response
 
 `{"url":url}`
 
 ## vcf file search
 
-### response
-
 endpoint `/<idx>/ids`
 
 No pages. Only return first 50 hits. Contains url for download.
+
+Request body:
+
+```
+{
+  "_source":["pos", "ref"],
+  "ids":["18:10636A>C", "18:10644C>G", "18:10667C>T", "18:10719C>G"]
+}
+```
+
+IDs should in format of `"contig":pos"Ref">"Alt"`
+
+### response
+
+
 
 ```
 {
@@ -66,6 +81,7 @@ No pages. Only return first 50 hits. Contains url for download.
 }
 ```
 
-## All other queries
+## Other Queries
+Data scheme `/<idx>/_mapping` .
 
 Same as elasticsearch. 
