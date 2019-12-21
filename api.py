@@ -15,23 +15,23 @@ from utils import *
 app = Flask(__name__)
 CORS(app)
 
-
 def get_mapping(idx='vs-index'):
     all_mapping = es.indices.get_mapping()
     mapping = all_mapping[idx]['mappings']['properties']
     fields = [i for i in mapping]
     return fields
-
+'''
+'''
 @app.route('/<idx>/anno_tree')
 def get_anno_tree(idx):
-    stct = structure_mapping(get_mapping(idx=idx))
-    tree_dic = dict_to_tree(stct)
-    return jsonify({"header_tree_array":[tree_dic[i].get_dic() for i in sorted(tree_dic.keys())]})
+    #stct = structure_mapping(get_mapping(idx=idx))
+    #tree_dic = dict_to_tree(stct)
+    return jsonify({"header_tree_array": init_tree_list()}) #[tree_dic[i].get_dic() for i in sorted(tree_dic.keys())]})
 
 
 @app.route('/<idx>/structure')
 def show_idx_str(idx):
-    stct = structure_mapping(get_mapping(idx=idx))
+    stct = get_mapping(idx=idx)
     return jsonify(stct)
 
 '''
