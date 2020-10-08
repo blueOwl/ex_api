@@ -13,7 +13,7 @@ def query_vcf(es, body, output, index='vs-index'):
         if resp['found']:
             count += 1
             if count > config.maxRes:break
-            li = [str(resp['_source'][k]) for k in source if k in resp['_source']]
+            li = [str(resp['_source'].get(k, '.')) for k in source]
             output('\t'.join(li) + "\n")
             if len(page) < 50:
                 page.append({k:resp['_source'][k] for k in source if k in resp['_source']})

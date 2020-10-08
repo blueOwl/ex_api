@@ -14,6 +14,7 @@ from utils import *
 #es = Elasticsearch(hosts=["127.0.0.1:9200"], timeout=5000)
 app = Flask(__name__)
 CORS(app)
+tree_list = init_tree_list()
 
 def get_mapping(idx='vs-index'):
     all_mapping = es.indices.get_mapping()
@@ -26,7 +27,8 @@ def get_mapping(idx='vs-index'):
 def get_anno_tree(idx):
     #stct = structure_mapping(get_mapping(idx=idx))
     #tree_dic = dict_to_tree(stct)
-    return jsonify({"header_tree_array": init_tree_list()}) #[tree_dic[i].get_dic() for i in sorted(tree_dic.keys())]})
+    #return jsonify({"header_tree_array": init_tree_list()}) #[tree_dic[i].get_dic() for i in sorted(tree_dic.keys())]})
+    return jsonify({"header_tree_array": tree_list}) #[tree_dic[i].get_dic() for i in sorted(tree_dic.keys())]})
 
 
 @app.route('/<idx>/structure')

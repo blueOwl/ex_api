@@ -1,6 +1,6 @@
 import requests
 
-host = 'http://panthertest3.med.usc.edu:8083'
+host = 'http://pantherdb.org'
 gene_mapping_api = '/services/oai/pantherdb/geneinfo'
 params = {"geneInputList":"ABCA1", "organism":9606}
 
